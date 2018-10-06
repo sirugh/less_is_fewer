@@ -12,7 +12,7 @@ var cursors;
 var stars;
 var objects = {};
 
-class Colors extends Phaser.Scene {
+class Level1 extends Phaser.Scene {
   constructor () {
     super({
       key: 'level-1',
@@ -141,4 +141,4 @@ class Colors extends Phaser.Scene {
   }
 }
 
-export default Colors;
+export default Level1;
