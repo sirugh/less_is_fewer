@@ -112,7 +112,7 @@ class Gravity extends Phaser.Scene {
       playerVelocity = -160;
     }
 
-    if (cursors.up.isDown && player.body.touching.down) { // apply force relative to the player
+    if (cursors.up.isDown && (player.body.blocked[gravityDirection] || player.body.touching[gravityDirection])) { // apply force relative to the player
       playerAxis = 'y';
       playerVelocity = -330;
     }
