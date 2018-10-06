@@ -45,12 +45,13 @@ class Gravity extends Phaser.Scene {
     player = (new BallE(this, 100, 450, 'dude')).instance
 
     // Create "gravity switcher"
-    const gravitySwitch = (new Switch(this, 300, 500, 'bomb')).instance
+    const gravitySwitch1 = (new Switch(this, 300, 500, 'bomb')).instance
+    const gravitySwitch2 = (new Switch(this, 20, 200, 'bomb')).instance
 
     // Create "color switcher"
     const colorSwitch1 = (new Switch(this, 150, 500, 'star')).instance;
     const colorSwitch2 = (new Switch(this, 450, 350, 'star')).instance;
-    const colorSwitch3 = (new Switch(this, 150, 200, 'star')).instance;
+    const colorSwitch3 = (new Switch(this, 100, 200, 'star')).instance;
 
     // Add collisions
     this.physics.add.collider(player, platforms);
@@ -59,9 +60,14 @@ class Gravity extends Phaser.Scene {
     this.physics.add.overlap(player, colorSwitch2, this._toggleColor, null, this);
     this.physics.add.overlap(player, colorSwitch3, this._toggleColor, null, this);
 
-    this.physics.add.overlap(player, gravitySwitch, (player, target) => {
+    this.physics.add.overlap(player, gravitySwitch1, (player, target) => {
       thisScene._changeGravity();
-      target.disableBody(true, true); // or target.destroy()
+      target.disableBody(true, true);
+    }, null, this);
+
+    this.physics.add.overlap(player, gravitySwitch2, (player, target) => {
+      thisScene._changeGravity();
+      target.disableBody(true, true);
     }, null, this);
 
     // Add inputs
@@ -78,7 +84,7 @@ class Gravity extends Phaser.Scene {
   _toggleColor (player, target) {
     this._changeBackground();
     this._updatePlatformCollisions();
-    target && target.disableBody(true, true); // or target.destroy()
+    target && target.disableBody(true, true);
   }
 
   update () {
