@@ -26,5 +26,8 @@ export default class BallE {
       y,
       texture
     )
+
+    this.instance.setBounce(0.2);
+    this.instance.setCollideWorldBounds(true);
   }
 }
