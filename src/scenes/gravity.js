@@ -1,6 +1,7 @@
 import 'phaser';
 import pkg from 'phaser/package.json';
 import BallE from '../characters/ball-e';
+import Switch from '../characters/switch';
 
 var player;
 var platforms;
@@ -40,15 +41,22 @@ class Gravity extends Phaser.Scene {
     player = (new BallE(this, 100, 450, 'dude')).instance
 
     // Create "gravity switcher"
-    const gravityToggler = this.physics.add.image(400, 100, 'star');
+    const gravitySwitch = (new Switch(this, 300, 500, 'bomb')).instance
+
+    // Create "color switcher"
+    const colorSwitch = (new Switch(this, 200, 500, 'star')).instance;
 
     // Add collisions
     this.physics.add.collider(player, platforms);
-    this.physics.add.collider(gravityToggler, platforms);
+    this.physics.add.collider(gravitySwitch, platforms);
 
-    this.physics.add.overlap(player, gravityToggler, (player, target) => {
-      thisScene._changeGravity();
+    this.physics.add.overlap(player, colorSwitch, (player, target) => {
       thisScene._changeBackground();
+      target.disableBody(true, true); // or target.destroy()
+    }, null, this);
+
+    this.physics.add.overlap(player, gravitySwitch, (player, target) => {
+      thisScene._changeGravity();
       target.disableBody(true, true); // or target.destroy()
     }, null, this);
 
@@ -57,9 +65,7 @@ class Gravity extends Phaser.Scene {
 
     this.input.keyboard.on('keydown_G', this._changeGravity);
 
-    this.input.keyboard.on('keydown_R', () => {
-      thisScene._changeBackground();
-    });
+    this.input.keyboard.on('keydown_R', this._changeBackground);
   }
 
   update () {
