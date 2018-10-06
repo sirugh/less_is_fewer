@@ -55,7 +55,10 @@ class Gravity extends Phaser.Scene {
     // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
 
-    this.input.keyboard.on('keydown_G', this._changeGravity.bind(this));
+    this.input.keyboard.on('keydown_W', () => this._changeGravity.call(this, 'up'));
+    this.input.keyboard.on('keydown_A', () => this._changeGravity.call(this, 'left'));
+    this.input.keyboard.on('keydown_S', () => this._changeGravity.call(this, 'down'));
+    this.input.keyboard.on('keydown_D', () => this._changeGravity.call(this, 'right'));
 
     this.input.keyboard.on('keydown_N', () => {
       thisScene.scene.start('colors')
@@ -64,63 +67,110 @@ class Gravity extends Phaser.Scene {
     objects.camera.setBackgroundColor(BLACK_RGBA);
   }
 
-  update () {
-    const gravityDirection = this._getGravityDirection()
-    if (gravityDirection === 'y') {
-      if (cursors.left.isDown) {
-        player.setVelocityX(-160);
-      }
-      else if (cursors.right.isDown) {
-        player.setVelocityX(160);
-      }
-      else {
-        player.setVelocityX(0);
-      }
+  /**
+   * helper function for moving worlds
+   * @param {string} gravityDirection - up, down, left, right relative to viewport/screen/real-life
+   * @param {x} relativeAxis - axis relative to the character/sprite
+   * @param {number} velocity
+   */
+  _axisHelper(worldOrientation, relativeAxis, velocity) {
+    let flipAxis = (xOrY) => ({ x: 'y', y: 'x' })[xOrY];
 
-      if (cursors.up.isDown && player.body.touching.down){
-        player.setVelocityY(-330);
-      }
+    // init with defaults;
+    let newAxis = relativeAxis;
+    let newVelocity = velocity;
+
+    if (worldOrientation === 'right') {
+      newAxis = flipAxis(relativeAxis);
+      newVelocity = newVelocity * -1;
     }
-    else {
-      if (cursors.left.isDown) {
-        player.setVelocityY(-160);
-      }
-      else if (cursors.right.isDown) {
-        player.setVelocityY(160);
-      }
-      else {
-        player.setVelocityY(0);
-      }
+    if (worldOrientation === 'up') {
+      newVelocity = newVelocity * -1;
+    }
+    if (worldOrientation === 'left') {
+      newAxis = flipAxis(relativeAxis);
+    }
 
-      if (cursors.up.isDown && player.body.touching.down){
-        player.setVelocityX(330);
-      }
+    return {
+      axis: newAxis,
+      velocity: newVelocity
     }
   }
 
-  _changeGravity () {
-    const gravityDirection = this._getGravityDirection();
-    if (gravityDirection === 'y') {
-      player.angle += 90;
-    } else {
-      player.angle -= 90;
-    }
-    const tempY = this.physics.world.gravity.y
-    const tempX = this.physics.world.gravity.x
+  update () {
+    const gravityDirection = this._getGravityDirection()
 
-    this.physics.world.gravity.y = -tempX;
-    this.physics.world.gravity.x = -tempY;
+    let playerAxis = 'x';
+    let playerVelocity = 0;
+    if (cursors.right.isDown) { // apply force relative to the player
+      playerAxis = 'x';
+      playerVelocity = 160;
+    }
+
+    if (cursors.left.isDown) { // apply force relative to the player
+      playerAxis = 'x';
+      playerVelocity = -160;
+    }
+
+    if (cursors.up.isDown && player.body.touching.down) { // apply force relative to the player
+      playerAxis = 'y';
+      playerVelocity = -330;
+    }
+
+    let absoluteAxis = this._axisHelper(gravityDirection, playerAxis, playerVelocity);
+    player['setVelocity'+absoluteAxis.axis.toUpperCase()](absoluteAxis.velocity)
+  }
+
+  _changeGravity (desiredDirection) {
+    const gravityDirection = this._getGravityDirection();
+
+    if (!desiredDirection) {
+      const gravityDirection = this._getGravityDirection();
+      // TODO: make this not dumb
+      if (gravityDirection === 'left' || gravityDirection === 'right') {
+        desiredDirection === 'down'
+      }
+      if (gravityDirection === 'up' || gravityDirection === 'down') {
+        desiredDirection === 'left'
+      }
+    }
+
+    // reset
+    this.physics.world.gravity.y = 0;
+    this.physics.world.gravity.x = 0;
+
+    // set force from appropraite direction
+    if (desiredDirection === 'left') {
+      this.physics.world.gravity.x = -330;
+      player.angle = -90;
+    }
+    if (desiredDirection === 'up') {
+      this.physics.world.gravity.y = -330;
+      player.angle = 180;
+    }
+    if (desiredDirection === 'right') {
+      this.physics.world.gravity.x = 330;
+      player.angle = -90;
+    }
+    if (desiredDirection === 'down') {
+      this.physics.world.gravity.y = 330;
+      player.angle = 0;
+    }
   }
 
   _getGravityDirection () {
     const { x, y } = this.physics.world.gravity;
 
-    if (x < 0) {
-      return 'x'
+    if (y > 0 && x === 0) {
+      return 'down'
     }
-    else {
-      return 'y'
+    if (y < 0 && x === 0) {
+      return 'up'
     }
+    if (x < 0 && y === 0) {
+      return 'left'
+    }
+    return 'right'
   }
 }
 
