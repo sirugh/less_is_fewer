@@ -12,10 +12,10 @@ var cursors;
 var stars;
 var objects = {};
 
-class End extends Phaser.Scene {
+class Dead extends Phaser.Scene {
   constructor () {
     super({
-      key: 'end',
+      key: 'dead',
       active: false
     })
   }
@@ -150,4 +150,4 @@ class End extends Phaser.Scene {
   }
 }
 
-export default End;
+export default Dead;
