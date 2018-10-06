@@ -163,6 +163,12 @@ class Gravity extends Phaser.Scene {
   }
 
   _changeGravity () {
+    const gravityDirection = this._getGravityDirection();
+    if (gravityDirection === 'y') {
+      player.angle += 90;
+    } else {
+      player.angle -= 90;
+    }
     const tempY = this.physics.world.gravity.y
     const tempX = this.physics.world.gravity.x
 
