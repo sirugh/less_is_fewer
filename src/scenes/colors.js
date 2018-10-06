@@ -27,26 +27,28 @@ class Colors extends Phaser.Scene {
 
     // Create platform groups. We will use these to toggle collision boundaries.
     platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'black_platform',).setScale(2).refreshBody();
-    platforms.create(50, 250, 'black_platform');
-    platforms.create(400, 568, 'white_platform').setScale(2).refreshBody();
-    platforms.create(600, 400, 'white_platform');
-    platforms.create(750, 220, 'white_platform');
+    platforms.create(0, 550, 'white_platform')
+    platforms.create(800, 550, 'black_platform')
 
     // Create player
     player = (new Player(this, 100, 450, 'dude')).instance
 
     // Create "color switcher"
-    const colorSwitch1 = (new Switch(this, 150, 500, 'star')).instance;
-    const colorSwitch2 = (new Switch(this, 450, 350, 'star')).instance;
-    const colorSwitch3 = (new Switch(this, 100, 200, 'star')).instance;
+    objects.colorSwitches = [
+      (new Switch(this, 400, 350, 'star')).instance,
+    ]
+
+    // Create exit
+    const exit = (new Switch(this, 700, 500, 'exit')).instance
 
     // Add collisions
     this.physics.add.collider(player, platforms);
 
-    this.physics.add.overlap(player, colorSwitch1, this._toggleColor, null, this);
-    this.physics.add.overlap(player, colorSwitch2, this._toggleColor, null, this);
-    this.physics.add.overlap(player, colorSwitch3, this._toggleColor, null, this);
+    objects.colorSwitches.forEach(item => {
+      this.physics.add.overlap(player, item, this._toggleColor, null, this);
+    });
+
+    this.physics.add.overlap(player, exit, this._toggleNextLevel, null, this);
 
     // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
@@ -59,6 +61,10 @@ class Colors extends Phaser.Scene {
 
     objects.camera.setBackgroundColor(BLACK_RGBA);
     this._updatePlatformCollisions();
+  }
+
+  _toggleNextLevel () {
+    this.scene.start('gravity')
   }
 
   _toggleColor (player, target) {

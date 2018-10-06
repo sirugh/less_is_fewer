@@ -14,6 +14,7 @@ class Boot extends Phaser.Scene {
   }
   preload () {
     this.load.image('dude', 'assets/square_man.png');
+    this.load.image('exit', 'assets/ruby.png');
     this.load.image('white_platform', 'assets/white_platform.png');
     this.load.image('black_platform', 'assets/black_platform.png');
     this.load.image('star', 'assets/star.png');
