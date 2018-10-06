@@ -44,16 +44,16 @@ class Gravity extends Phaser.Scene {
     const gravitySwitch = (new Switch(this, 300, 500, 'bomb')).instance
 
     // Create "color switcher"
-    const colorSwitch = (new Switch(this, 200, 500, 'star')).instance;
+    const colorSwitch1 = (new Switch(this, 150, 500, 'star')).instance;
+    const colorSwitch2 = (new Switch(this, 200, 500, 'star')).instance;
 
     // Add collisions
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(gravitySwitch, platforms);
 
-    this.physics.add.overlap(player, colorSwitch, (player, target) => {
-      thisScene._changeBackground();
-      target.disableBody(true, true); // or target.destroy()
-    }, null, this);
+    this.physics.add.overlap(player, colorSwitch1, this._collideColorSwitch, null, this);
+
+    this.physics.add.overlap(player, colorSwitch2, this._collideColorSwitch, null, this);
 
     this.physics.add.overlap(player, gravitySwitch, (player, target) => {
       thisScene._changeGravity();
@@ -66,6 +66,11 @@ class Gravity extends Phaser.Scene {
     this.input.keyboard.on('keydown_G', this._changeGravity);
 
     this.input.keyboard.on('keydown_R', this._changeBackground);
+  }
+
+  _collideColorSwitch (player, target) {
+    this._changeBackground();
+    target.disableBody(true, true); // or target.destroy()
   }
 
   update () {
@@ -109,9 +114,16 @@ class Gravity extends Phaser.Scene {
   }
 
   _changeBackground () {
-    const color = new Phaser.Display.Color();
-    color.random(50);
-    objects.camera.setBackgroundColor(color.rgba);
+    // Get current rgba
+    const currColor = objects.camera.backgroundColor.rgba
+
+    if (currColor === 'rgba(255,255,255,1)') {
+      objects.camera.setBackgroundColor('rgba(0,0,0,1)');
+    }
+    else {
+      objects.camera.setBackgroundColor('rgba(255,255,255,1)');
+    }
+
   }
 
   _changeGravity () {
