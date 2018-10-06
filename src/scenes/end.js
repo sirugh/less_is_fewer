@@ -12,10 +12,10 @@ var cursors;
 var stars;
 var objects = {};
 
-class Colors extends Phaser.Scene {
+class End extends Phaser.Scene {
   constructor () {
     super({
-      key: 'level-1',
+      key: 'end',
       active: false
     })
   }
@@ -56,12 +56,21 @@ class Colors extends Phaser.Scene {
 
     this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
 
-    objects.camera.setBackgroundColor(BLACK_RGBA);
+    // objects.camera.setBackgroundColor(BLACK_RGBA);
+
     this._updatePlatformCollisions();
+
+    const centerX = 800 / 2;
+    const centerY = 600 / 2;
+    const welcomeMessage = `THE END`;
+
+    this.add
+      .text(centerX, centerY * 0.8, welcomeMessage, { font: "bold 30px Arial", fill: "#fff" })
+      .setOrigin(0.5, 0.5);
   }
 
   _toggleNextLevel () {
-    this.scene.start('level-2')
+    this.scene.start('level-1')
   }
 
   _toggleColor (player, target) {
@@ -141,4 +150,4 @@ class Colors extends Phaser.Scene {
   }
 }
 
-export default Colors;
+export default End;

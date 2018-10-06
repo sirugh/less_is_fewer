@@ -12,10 +12,10 @@ var cursors;
 var stars;
 var objects = {};
 
-class Colors extends Phaser.Scene {
+class Level3 extends Phaser.Scene {
   constructor () {
     super({
-      key: 'level-1',
+      key: 'level-3',
       active: false
     })
   }
@@ -61,7 +61,7 @@ class Colors extends Phaser.Scene {
   }
 
   _toggleNextLevel () {
-    this.scene.start('level-2')
+    this.scene.start('end')
   }
 
   _toggleColor (player, target) {
@@ -141,4 +141,4 @@ class Colors extends Phaser.Scene {
   }
 }
 
-export default Colors;
+export default Level3;

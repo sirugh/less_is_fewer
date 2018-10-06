@@ -15,7 +15,7 @@ var objects = {};
 class Gravity extends Phaser.Scene {
   constructor () {
     super({
-      key: 'gravity',
+      key: 'level-2',
       active: false
     })
   }
@@ -60,11 +60,17 @@ class Gravity extends Phaser.Scene {
     this.input.keyboard.on('keydown_S', () => this._changeGravity.call(this, 'down'));
     this.input.keyboard.on('keydown_D', () => this._changeGravity.call(this, 'right'));
 
-    this.input.keyboard.on('keydown_N', () => {
-      thisScene.scene.start('colors')
-    });
+    this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
+
+    // Create exit
+    const exit = (new Switch(this, 700, 500, 'exit')).instance
+    this.physics.add.overlap(player, exit, this._toggleNextLevel, null, this);
 
     objects.camera.setBackgroundColor(BLACK_RGBA);
+  }
+
+  _toggleNextLevel () {
+    this.scene.start('level-3');
   }
 
   /**

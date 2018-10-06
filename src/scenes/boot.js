@@ -26,8 +26,7 @@ class Boot extends Phaser.Scene {
   }
 
   create (config) {
-    // this.createAnims();
-    this.scene.start('gravity').remove();
+    this.scene.start('level-1').remove();
   }
 
   createProgressBar () {
