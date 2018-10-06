@@ -4,13 +4,13 @@ import levels from '../levels';
 
 const config = {
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 800,
+  height: 600,
   physics: {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: false
+      debug: true
     }
   },
   scene: levels
@@ -18,7 +18,7 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-setTimeout(() => {
-  game.scene.stop('start');
-  game.scene.start('level1');
-}, 1000);
+// setTimeout(() => {
+//   game.scene.stop('start');
+//   game.scene.start('level1');
+// }, 1000);

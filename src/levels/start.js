@@ -5,7 +5,7 @@ class Level1 extends Phaser.Scene {
   constructor () {
     super({
       key: 'start',
-      active: true
+      active: false
     })
   }
   create (config) {
