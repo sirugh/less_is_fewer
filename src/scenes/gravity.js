@@ -18,7 +18,8 @@ class Gravity extends Phaser.Scene {
   }
 
   preload () {
-    this.load.image('ground', 'assets/platform.png');
+    this.load.image('white_platform', 'assets/white_platform.png');
+    this.load.image('black_platform', 'assets/black_platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
@@ -32,10 +33,10 @@ class Gravity extends Phaser.Scene {
 
     // Create platforms
     platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-    platforms.create(600, 400, 'ground');
-    platforms.create(50, 250, 'ground');
-    platforms.create(750, 220, 'ground');
+    platforms.create(400, 568, 'black_platform').setScale(2).refreshBody();
+    platforms.create(600, 400, 'white_platform');
+    platforms.create(50, 250, 'black_platform');
+    platforms.create(750, 220, 'white_platform');
 
     // Create player
     player = (new BallE(this, 100, 450, 'dude')).instance
@@ -45,15 +46,16 @@ class Gravity extends Phaser.Scene {
 
     // Create "color switcher"
     const colorSwitch1 = (new Switch(this, 150, 500, 'star')).instance;
-    const colorSwitch2 = (new Switch(this, 200, 500, 'star')).instance;
+    const colorSwitch2 = (new Switch(this, 450, 350, 'star')).instance;
+    const colorSwitch3 = (new Switch(this, 150, 200, 'star')).instance;
 
     // Add collisions
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(gravitySwitch, platforms);
 
     this.physics.add.overlap(player, colorSwitch1, this._collideColorSwitch, null, this);
-
     this.physics.add.overlap(player, colorSwitch2, this._collideColorSwitch, null, this);
+    this.physics.add.overlap(player, colorSwitch3, this._collideColorSwitch, null, this);
 
     this.physics.add.overlap(player, gravitySwitch, (player, target) => {
       thisScene._changeGravity();
@@ -65,7 +67,7 @@ class Gravity extends Phaser.Scene {
 
     this.input.keyboard.on('keydown_G', this._changeGravity);
 
-    this.input.keyboard.on('keydown_R', this._changeBackground);
+    // this.input.keyboard.on('keydown_R', this._changeBackground);
   }
 
   _collideColorSwitch (player, target) {
