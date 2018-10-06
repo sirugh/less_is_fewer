@@ -5,5 +5,6 @@ export default {
   RED:    0xff0000,
   SILVER: 0xcccccc,
   YELLOW: 0xffff00,
-  WHITE:  0xffffff
+  WHITE:  0xffffff,
+  BLACK:  0x000000,
 };

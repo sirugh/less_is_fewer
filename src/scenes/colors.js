@@ -57,28 +57,38 @@ class Colors extends Phaser.Scene {
       thisScene.scene.start('gravity')
     });
 
-    objects.camera.setBackgroundColor(WHITE_RGBA);
+    objects.camera.setBackgroundColor(BLACK_RGBA);
     this._updatePlatformCollisions();
   }
 
   _toggleColor (player, target) {
     this._changeBackground();
     this._updatePlatformCollisions();
+    this._togglePlayerColor(player);
+
     target && target.disableBody(true, true);
+  }
+
+  _togglePlayerColor (player) {
+    if (player) {
+      if (player.isTinted) {
+        player.clearTint()
+      }
+      else {
+        player.setTint(0x000000)
+      }
+    }
   }
 
   update () {
     if (cursors.left.isDown) {
       player.setVelocityX(-160);
-      // player.anims.play('left', true);
     }
     else if (cursors.right.isDown) {
       player.setVelocityX(160);
-      // player.anims.play('right', true);
     }
     else {
       player.setVelocityX(0);
-      // player.anims.play('turn', true);
     }
 
     if (cursors.up.isDown && player.body.touching.down){
