@@ -27,10 +27,10 @@ class Gravity extends Phaser.Scene {
 
     // Create platform groups. We will use these to toggle collision boundaries.
     platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'black_platform',).setScale(2).refreshBody();
-    platforms.create(50, 250, 'black_platform');
-    platforms.create(600, 400, 'black_platform');
-    platforms.create(750, 220, 'black_platform');
+    platforms.create(400, 568, 'white_platform',).setScale(2).refreshBody();
+    platforms.create(50, 250, 'white_platform');
+    platforms.create(600, 400, 'white_platform');
+    platforms.create(750, 220, 'white_platform');
 
     // Create player
     player = (new Player(this, 100, 450, 'dude')).instance
@@ -61,7 +61,7 @@ class Gravity extends Phaser.Scene {
       thisScene.scene.start('colors')
     });
 
-    objects.camera.setBackgroundColor(WHITE_RGBA);
+    objects.camera.setBackgroundColor(BLACK_RGBA);
   }
 
   update () {
@@ -69,15 +69,12 @@ class Gravity extends Phaser.Scene {
     if (gravityDirection === 'y') {
       if (cursors.left.isDown) {
         player.setVelocityX(-160);
-        // player.anims.play('left', true);
       }
       else if (cursors.right.isDown) {
         player.setVelocityX(160);
-        // player.anims.play('right', true);
       }
       else {
         player.setVelocityX(0);
-        // player.anims.play('turn', true);
       }
 
       if (cursors.up.isDown && player.body.touching.down){
@@ -87,15 +84,12 @@ class Gravity extends Phaser.Scene {
     else {
       if (cursors.left.isDown) {
         player.setVelocityY(-160);
-        // player.anims.play('left', true);
       }
       else if (cursors.right.isDown) {
         player.setVelocityY(160);
-        // player.anims.play('right', true);
       }
       else {
         player.setVelocityY(0);
-        // player.anims.play('turn');
       }
 
       if (cursors.up.isDown && player.body.touching.down){
