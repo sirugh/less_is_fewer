@@ -37,30 +37,7 @@ class Gravity extends Phaser.Scene {
     platforms.create(750, 220, 'ground');
 
     // Create player
-    player = (new BallE(this, 100, 450, 'dude')).initialize()
-    player.setBounce(0.2);
-    player.setCollideWorldBounds(true);
-
-    // Animate player
-    this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-        frameRate: 10,
-        repeat: -1
-    });
-
-    this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'dude', frame: 4 } ],
-        frameRate: 20
-    });
-
-    this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
+    player = (new BallE(this, 100, 450, 'dude')).instance
 
     // Create "gravity switcher"
     const gravityToggler = this.physics.add.image(400, 100, 'star');

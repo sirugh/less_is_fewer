@@ -10,11 +10,11 @@ class Boot extends Phaser.Scene {
   }
 
   preload () {
-    
+
   }
   create (config) {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    const centerX = 800 / 2;
+    const centerY = 600 / 2;
     const welcomeMessage = `LOADING SCREEN`;
 
     this.add
