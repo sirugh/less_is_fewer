@@ -142,7 +142,7 @@ class Gravity extends Phaser.Scene {
     // set force from appropraite direction
     if (desiredDirection === 'left') {
       this.physics.world.gravity.x = -330;
-      player.angle = -90;
+      player.angle = 90;
     }
     if (desiredDirection === 'up') {
       this.physics.world.gravity.y = -330;
