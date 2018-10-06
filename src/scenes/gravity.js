@@ -8,10 +8,6 @@ var cursors;
 var stars;
 var objects = {};
 
-function collectStar (player, star) {
-  star.disableBody(true, true);
-}
-
 class Gravity extends Phaser.Scene {
   constructor () {
     super({
@@ -27,29 +23,25 @@ class Gravity extends Phaser.Scene {
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
   }
 
-  changeBackground () {
-    var color = new Phaser.Display.Color();
-    color.random(50);
-    objects.camera.setBackgroundColor(color.rgba);
-  }
-  
   create (config) {
+    const thisScene = this;
+
     objects.camera = this.cameras.add(0, 0, 800, 600);
-    this.changeBackground();
+    this._changeBackground();
 
+    // Create platforms
     platforms = this.physics.add.staticGroup();
-
     platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-
     platforms.create(600, 400, 'ground');
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
 
+    // Create player
     player = (new BallE(this, 100, 450, 'dude')).initialize()
-
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
+    // Animate player
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -70,35 +62,26 @@ class Gravity extends Phaser.Scene {
         repeat: -1
     });
 
+    // Create "gravity switcher"
+    const gravityToggler = this.physics.add.image(400, 100, 'star');
+
+    // Add collisions
+    this.physics.add.collider(player, platforms);
+    this.physics.add.collider(gravityToggler, platforms);
+
+    this.physics.add.overlap(player, gravityToggler, (player, target) => {
+      thisScene._changeGravity();
+      thisScene._changeBackground();
+      target.disableBody(true, true); // or target.destroy()
+    }, null, this);
+
+    // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
 
-    stars = this.physics.add.group({
-      key: 'star',
-      repeat: 11,
-      setXY: { x: 12, y: 0, stepX: 70 }
-    });
-    
-    stars.children.iterate(function (star) {
-      star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      star.setCollideWorldBounds(true);
-    });
+    this.input.keyboard.on('keydown_G', this._changeGravity);
 
-    this.physics.add.collider(player, platforms);
-    this.physics.add.collider(stars, platforms);
-
-    this.physics.add.overlap(player, stars, collectStar, null, this);
-
-    this.input.keyboard.on('keydown_G', () => {
-      const tempY = this.physics.world.gravity.y
-      const tempX = this.physics.world.gravity.x
-
-      this.physics.world.gravity.y = -tempX;
-      this.physics.world.gravity.x = -tempY;
-    });
-
-    const scene = this;
     this.input.keyboard.on('keydown_R', () => {
-      scene.changeBackground();
+      thisScene._changeBackground();
     });
   }
 
@@ -140,7 +123,20 @@ class Gravity extends Phaser.Scene {
         player.setVelocityX(330);
       }
     }
+  }
 
+  _changeBackground () {
+    const color = new Phaser.Display.Color();
+    color.random(50);
+    objects.camera.setBackgroundColor(color.rgba);
+  }
+
+  _changeGravity () {
+    const tempY = this.physics.world.gravity.y
+    const tempX = this.physics.world.gravity.x
+
+    this.physics.world.gravity.y = -tempX;
+    this.physics.world.gravity.x = -tempY;
   }
 
   _getGravityDirection () {
