@@ -1,0 +1,23 @@
+{
+  "name": "less_is_fewer",
+  "version": "1.0.0",
+  "description": "Game Jam 2018 Game",
+  "main": "index.js",
+  "scripts": {
+    "play": "python -m SimpleHTTPServer 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirugh/less_is_fewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sirugh/less_is_fewer/issues"
+  },
+  "homepage": "https://github.com/sirugh/less_is_fewer#readme",
+  "dependencies": {
+    "phaser": "^3.14.0"
+  }
+}
