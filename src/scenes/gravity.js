@@ -126,12 +126,14 @@ class Gravity extends Phaser.Scene {
 
     if (!desiredDirection) {
       const gravityDirection = this._getGravityDirection();
+
+      console.log(gravityDirection);
       // TODO: make this not dumb
       if (gravityDirection === 'left' || gravityDirection === 'right') {
-        desiredDirection === 'down'
+        desiredDirection = 'down'
       }
       if (gravityDirection === 'up' || gravityDirection === 'down') {
-        desiredDirection === 'left'
+        desiredDirection = 'left'
       }
     }
 
