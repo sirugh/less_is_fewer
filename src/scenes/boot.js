@@ -1,17 +1,21 @@
 import 'phaser';
 import pkg from 'phaser/package.json';
 
-class Level1 extends Phaser.Scene {
+class Boot extends Phaser.Scene {
   constructor () {
     super({
       key: 'start',
       active: false
     })
   }
+
+  preload () {
+    
+  }
   create (config) {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const welcomeMessage = `START SCREEN`;
+    const welcomeMessage = `LOADING SCREEN`;
 
     this.add
       .text(centerX, centerY * 0.8, welcomeMessage, { font: "bold 30px Arial", fill: "#fff" })
@@ -19,4 +23,4 @@ class Level1 extends Phaser.Scene {
   }
 }
 
-export default Level1;
+export default Boot;

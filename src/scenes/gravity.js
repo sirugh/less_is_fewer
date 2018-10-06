@@ -6,29 +6,36 @@ var player;
 var platforms;
 var cursors;
 var stars;
+var objects = {};
 
 function collectStar (player, star) {
   star.disableBody(true, true);
 }
 
-class Level1 extends Phaser.Scene {
+class Gravity extends Phaser.Scene {
   constructor () {
     super({
-      key: 'level1',
+      key: 'gravity',
       active: true
     })
   }
 
   preload () {
-    this.load.image('sky', 'assets/sky.png');
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
   }
 
+  changeBackground () {
+    var color = new Phaser.Display.Color();
+    color.random(50);
+    objects.camera.setBackgroundColor(color.rgba);
+  }
+  
   create (config) {
-    this.add.image(400, 300, 'sky');
+    objects.camera = this.cameras.add(0, 0, 800, 600);
+    this.changeBackground();
 
     platforms = this.physics.add.staticGroup();
 
@@ -70,9 +77,10 @@ class Level1 extends Phaser.Scene {
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 }
     });
-
-    stars.children.iterate(function (child) {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    
+    stars.children.iterate(function (star) {
+      star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      star.setCollideWorldBounds(true);
     });
 
     this.physics.add.collider(player, platforms);
@@ -80,12 +88,17 @@ class Level1 extends Phaser.Scene {
 
     this.physics.add.overlap(player, stars, collectStar, null, this);
 
-    this.input.keyboard.on('keydown_G', (event) => {
+    this.input.keyboard.on('keydown_G', () => {
       const tempY = this.physics.world.gravity.y
       const tempX = this.physics.world.gravity.x
 
       this.physics.world.gravity.y = -tempX;
       this.physics.world.gravity.x = -tempY;
+    });
+
+    const scene = this;
+    this.input.keyboard.on('keydown_R', () => {
+      scene.changeBackground();
     });
   }
 
@@ -142,6 +155,4 @@ class Level1 extends Phaser.Scene {
   }
 }
 
-
-
-export default Level1;
+export default Gravity;
