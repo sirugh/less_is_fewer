@@ -13,19 +13,21 @@ class Boot extends Phaser.Scene {
     this.progressBarRectangle = null;
   }
   preload () {
+    this.load.image('dude', 'assets/square_man.png');
     this.load.image('white_platform', 'assets/white_platform.png');
     this.load.image('black_platform', 'assets/black_platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
-    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 
     this.load.on('progress', this.onLoadProgress, this);
     this.load.on('complete', this.onLoadComplete, this);
     this.createProgressBar();
   }
+
   create (config) {
-    this.createAnims();
-    this.scene.start('gravity').remove();
+    // this.createAnims();
+    this.scene.start('colors').remove();
   }
 
   createProgressBar () {

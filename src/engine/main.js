@@ -17,8 +17,3 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
-
-// setTimeout(() => {
-//   game.scene.stop('start');
-//   game.scene.start('level1');
-// }, 1000);

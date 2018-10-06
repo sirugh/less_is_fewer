@@ -1,6 +1,6 @@
 import 'phaser';
 import pkg from 'phaser/package.json';
-import BallE from '../characters/ball-e';
+import Player from '../characters/player';
 import Switch from '../characters/switch';
 
 const WHITE_RGBA = 'rgba(255,255,255,1)';
@@ -34,7 +34,7 @@ class Colors extends Phaser.Scene {
     platforms.create(750, 220, 'white_platform');
 
     // Create player
-    player = (new BallE(this, 100, 450, 'dude')).instance
+    player = (new Player(this, 100, 450, 'dude')).instance
 
     // Create "color switcher"
     const colorSwitch1 = (new Switch(this, 150, 500, 'star')).instance;
@@ -50,8 +50,6 @@ class Colors extends Phaser.Scene {
 
     // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
-
-    this.input.keyboard.on('keydown_G', this._changeGravity.bind(this));
 
     this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
 
@@ -70,42 +68,21 @@ class Colors extends Phaser.Scene {
   }
 
   update () {
-    const gravityDirection = this._getGravityDirection()
-    if (gravityDirection === 'y') {
-      if (cursors.left.isDown) {
-        player.setVelocityX(-160);
-        player.anims.play('left', true);
-      }
-      else if (cursors.right.isDown) {
-        player.setVelocityX(160);
-        player.anims.play('right', true);
-      }
-      else {
-        player.setVelocityX(0);
-        player.anims.play('turn', true);
-      }
-
-      if (cursors.up.isDown && player.body.touching.down){
-        player.setVelocityY(-330);
-      }
+    if (cursors.left.isDown) {
+      player.setVelocityX(-160);
+      // player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown) {
+      player.setVelocityX(160);
+      // player.anims.play('right', true);
     }
     else {
-      if (cursors.left.isDown) {
-        player.setVelocityY(-160);
-        player.anims.play('left', true);
-      }
-      else if (cursors.right.isDown) {
-        player.setVelocityY(160);
-        player.anims.play('right', true);
-      }
-      else {
-        player.setVelocityY(0);
-        player.anims.play('turn');
-      }
+      player.setVelocityX(0);
+      // player.anims.play('turn', true);
+    }
 
-      if (cursors.up.isDown && player.body.touching.down){
-        player.setVelocityX(330);
-      }
+    if (cursors.up.isDown && player.body.touching.down){
+      player.setVelocityY(-330);
     }
   }
 
@@ -148,31 +125,6 @@ class Colors extends Phaser.Scene {
       objects.camera.setBackgroundColor(WHITE_RGBA);
     }
 
-  }
-
-  _changeGravity () {
-    const gravityDirection = this._getGravityDirection();
-    if (gravityDirection === 'y') {
-      player.angle += 90;
-    } else {x
-      player.angle -= 90;
-    }
-    const tempY = this.physics.world.gravity.y
-    const tempX = this.physics.world.gravity.x
-
-    this.physics.world.gravity.y = -tempX;
-    this.physics.world.gravity.x = -tempY;
-  }
-
-  _getGravityDirection () {
-    const { x, y } = this.physics.world.gravity;
-
-    if (x < 0) {
-      return 'x'
-    }
-    else {
-      return 'y'
-    }
   }
 }
 

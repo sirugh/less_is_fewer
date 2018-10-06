@@ -1,6 +1,6 @@
 import 'phaser';
 import pkg from 'phaser/package.json';
-import BallE from '../characters/ball-e';
+import Player from '../characters/player';
 import Switch from '../characters/switch';
 
 const WHITE_RGBA = 'rgba(255,255,255,1)';
@@ -33,7 +33,7 @@ class Gravity extends Phaser.Scene {
     platforms.create(750, 220, 'black_platform');
 
     // Create player
-    player = (new BallE(this, 100, 450, 'dude')).instance
+    player = (new Player(this, 100, 450, 'dude')).instance
 
     // Create "gravity switcher"
     const gravitySwitch1 = (new Switch(this, 300, 500, 'bomb')).instance
@@ -69,15 +69,15 @@ class Gravity extends Phaser.Scene {
     if (gravityDirection === 'y') {
       if (cursors.left.isDown) {
         player.setVelocityX(-160);
-        player.anims.play('left', true);
+        // player.anims.play('left', true);
       }
       else if (cursors.right.isDown) {
         player.setVelocityX(160);
-        player.anims.play('right', true);
+        // player.anims.play('right', true);
       }
       else {
         player.setVelocityX(0);
-        player.anims.play('turn', true);
+        // player.anims.play('turn', true);
       }
 
       if (cursors.up.isDown && player.body.touching.down){
@@ -87,15 +87,15 @@ class Gravity extends Phaser.Scene {
     else {
       if (cursors.left.isDown) {
         player.setVelocityY(-160);
-        player.anims.play('left', true);
+        // player.anims.play('left', true);
       }
       else if (cursors.right.isDown) {
         player.setVelocityY(160);
-        player.anims.play('right', true);
+        // player.anims.play('right', true);
       }
       else {
         player.setVelocityY(0);
-        player.anims.play('turn');
+        // player.anims.play('turn');
       }
 
       if (cursors.up.isDown && player.body.touching.down){
