@@ -1,6 +1,7 @@
 import 'phaser';
 import pkg from 'phaser/package.json';
 import scenes from '../scenes';
+import { GRAVITY } from '../util/constants';
 
 const config = {
   type: Phaser.AUTO,
@@ -9,8 +10,8 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 300 },
-      debug: false
+      gravity: { y: GRAVITY },
+      debug: true
     }
   },
   scene: scenes
