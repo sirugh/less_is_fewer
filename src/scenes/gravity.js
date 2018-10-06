@@ -18,6 +18,7 @@ class Gravity extends Phaser.Scene {
       key: 'gravity',
       active: false
     })
+    window._scene = this;
   }
 
   create (config) {
@@ -114,7 +115,12 @@ class Gravity extends Phaser.Scene {
 
     if (cursors.up.isDown && (player.body.blocked[gravityDirection] || player.body.touching[gravityDirection])) { // apply force relative to the player
       playerAxis = 'y';
-      playerVelocity = -330;
+      // inverse if right or left
+      if (gravityDirection === 'left' || gravityDirection === 'right') {
+        playerVelocity = 330;
+      } else {
+        playerVelocity = -330;
+      }
     }
 
     let absoluteAxis = this._axisHelper(gravityDirection, playerAxis, playerVelocity);
@@ -127,7 +133,6 @@ class Gravity extends Phaser.Scene {
     if (!desiredDirection) {
       const gravityDirection = this._getGravityDirection();
 
-      console.log(gravityDirection);
       // TODO: make this not dumb
       if (gravityDirection === 'left' || gravityDirection === 'right') {
         desiredDirection = 'down'
