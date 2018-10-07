@@ -117,6 +117,7 @@ export default function LevelGenerator (config) {
         this.scene.start('1');
       }
       else {
+        this.events.emit('finish')
         this.scene.start('end');  
       }
     }
