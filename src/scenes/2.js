@@ -28,28 +28,20 @@ class Gravity extends Phaser.Scene {
 
     // Create platform groups. We will use these to toggle collision boundaries.
     platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'white_platform',).setScale(2).refreshBody();
-    platforms.create(50, 250, 'white_platform');
-    platforms.create(600, 400, 'white_platform');
-    platforms.create(750, 220, 'white_platform');
+    platforms.create(0, 400, 'white_platform').setScale(.5).refreshBody();
+    platforms.create(0, 200, 'white_platform').setScale(.5).refreshBody();
 
     // Create player
     this.player = new Player(this, 100, 450, 'dude')
     const playerSprite = this.player.sprite;
 
     // Create "gravity switcher"
-    const gravitySwitch1 = (new Switch(this, 300, 500, 'bomb')).instance
-    const gravitySwitch2 = (new Switch(this, 20, 200, 'bomb')).instance
+    const gravitySwitch1 = (new Switch(this, 750, 500, 'bomb')).instance
 
     // Add collisions
     this.physics.add.collider(playerSprite, platforms);
 
     this.physics.add.overlap(playerSprite, gravitySwitch1, (player, target) => {
-      thisScene._changeGravity();
-      target.disableBody(true, true);
-    }, null, this);
-
-    this.physics.add.overlap(playerSprite, gravitySwitch2, (player, target) => {
       thisScene._changeGravity();
       target.disableBody(true, true);
     }, null, this);
@@ -65,7 +57,7 @@ class Gravity extends Phaser.Scene {
     this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
 
     // Create exit
-    const exit = (new Switch(this, 20, 300, 'exit')).instance
+    const exit = (new Switch(this, 10, 10, 'exit')).instance
     this.physics.add.overlap(playerSprite, exit, this._toggleNextLevel, null, this);
 
     objects.camera.setBackgroundColor(BLACK_RGBA);
@@ -77,10 +69,6 @@ class Gravity extends Phaser.Scene {
 
 
   update () {
-    if (this.player.isTouchingWorld()) {
-      this.scene.restart();
-    }
-
     this.player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
   }
 
