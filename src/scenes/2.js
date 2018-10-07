@@ -107,14 +107,12 @@ class Gravity extends Phaser.Scene {
   update () {
     const gravityDirection = this._getGravityDirection()
 
-    if((player.body.blocked.left && !player.body.touching.left) 
-      || (player.body.blocked.up && !player.body.touching.up) 
+    if((player.body.blocked.left && !player.body.touching.left)
+      || (player.body.blocked.up && !player.body.touching.up)
       || (player.body.blocked.right && !player.body.touching.right)
+      || (player.body.blocked.down && !player.body.touching.down)
     ){
-      this.scene.start('dead');
-      setTimeout(function() {
-        this.scene.start(this.scene.key);
-      }.bind(this), 1000)
+      this.scene.restart();
     }
 
     let playerAxis = 'x';

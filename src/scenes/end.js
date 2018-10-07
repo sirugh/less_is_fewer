@@ -22,6 +22,8 @@ class End extends Phaser.Scene {
 
   create (config) {
     const thisScene = this;
+    const centerX = 800 / 2;
+    const centerY = 600 / 2;
 
     objects.camera = this.cameras.add(0, 0, 800, 600);
 
@@ -46,22 +48,19 @@ class End extends Phaser.Scene {
     });
 
     // Create exit
-    const exit = (new Switch(this, 700, 500, 'exit')).instance
+    const exit = (new Switch(this, centerX, centerY * 0.5, 'exit')).instance
     this.physics.add.overlap(player, exit, this._toggleNextLevel, null, this);
 
     // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
 
     this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
-
     this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
 
-    // objects.camera.setBackgroundColor(BLACK_RGBA);
+    objects.camera.setBackgroundColor(BLACK_RGBA);
 
     this._updatePlatformCollisions();
 
-    const centerX = 800 / 2;
-    const centerY = 600 / 2;
     const welcomeMessage = `THE END`;
 
     this.add
@@ -70,7 +69,7 @@ class End extends Phaser.Scene {
   }
 
   _toggleNextLevel () {
-    this.scene.start('level-1')
+    this.scene.start('level-1');
   }
 
   _toggleColor (player, target) {

@@ -61,7 +61,7 @@ class Level1 extends Phaser.Scene {
   }
 
   _toggleNextLevel () {
-    this.scene.start('level-2')
+    this.scene.start('level-2');
   }
 
   _toggleColor (player, target) {
@@ -84,6 +84,14 @@ class Level1 extends Phaser.Scene {
   }
 
   update () {
+    if((player.body.blocked.left && !player.body.touching.left)
+      || (player.body.blocked.up && !player.body.touching.up)
+      || (player.body.blocked.right && !player.body.touching.right)
+      || (player.body.blocked.down && !player.body.touching.down)
+    ){
+      this.scene.restart();
+    }
+
     if (cursors.left.isDown) {
       player.setVelocityX(-160);
     }
