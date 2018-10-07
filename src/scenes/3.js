@@ -19,6 +19,7 @@ const config = {
   ],
   gravitySwitches: [
   ],
+  text: 'FALL'
 }
 
 export default LevelGenerator(config);

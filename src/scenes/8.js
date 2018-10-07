@@ -1,26 +1,25 @@
 import LevelGenerator from './generator';
 
 const config = {
-  key: '7',
+  key: '8',
   player: { x: 100, y: 450 },
-  exit: { x: 700, y: 100 },
+  exit: { x: 500, y: 100 },
   platforms: [
-    { x: 760, y: 200, texture: 'black_platform_vertical' },
-    { x: 450, y: 200, texture: 'black_platform_vertical' },
+    { x: 450, y: 500, texture: 'black_platform_vertical' },
+    { x: 760, y: 500, texture: 'black_platform_vertical' },
 
-    { x: 100, y: 50, texture: 'white_platform' },
     { x: 100, y: 550, texture: 'white_platform' },
     { x: 300, y: 550, texture: 'white_platform' },
     { x: 500, y: 550, texture: 'white_platform' },
     { x: 700, y: 550, texture: 'white_platform' },
-    { x: 700, y: 50, texture: 'white_platform' },
   ],
   colorSwitches: [
-    { x: 400, y: 250 }
+    { x: 300, y: 500 }
   ],
   gravitySwitches: [
-    { x: 100, y: 350, direction: 'up'}
+    { x: 760, y: 300, direction: 'up'},
   ],
+  text: '!@%!@#%^#*'
 }
 
 export default LevelGenerator(config);

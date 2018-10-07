@@ -93,13 +93,13 @@ export default function LevelGenerator (config) {
     }
   
     addInputs () {
-      this.input.keyboard.on('keydown_W', () => this._changeGravity.call(this, 'up'));
-      this.input.keyboard.on('keydown_A', () => this._changeGravity.call(this, 'left'));
-      this.input.keyboard.on('keydown_S', () => this._changeGravity.call(this, 'down'));
-      this.input.keyboard.on('keydown_D', () => this._changeGravity.call(this, 'right'));
+      // this.input.keyboard.on('keydown_W', () => this._changeGravity.call(this, 'up'));
+      // this.input.keyboard.on('keydown_A', () => this._changeGravity.call(this, 'left'));
+      // this.input.keyboard.on('keydown_S', () => this._changeGravity.call(this, 'down'));
+      // this.input.keyboard.on('keydown_D', () => this._changeGravity.call(this, 'right'));
 
-      this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
-      this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
+      // this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
+      // this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
     }
   
     _toggleNextLevel () {

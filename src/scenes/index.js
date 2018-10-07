@@ -8,6 +8,7 @@ import Level4 from './4';
 import Level5 from './5';
 import Level6 from './6';
 import Level7 from './7';
+import Level8 from './8';
 import End from './end';
 
 export default [
@@ -21,5 +22,6 @@ export default [
   Level5,
   Level6,
   Level7,
+  Level8,
   End
 ];
