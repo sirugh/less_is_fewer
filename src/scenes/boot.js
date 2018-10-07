@@ -1,7 +1,6 @@
 import 'phaser';
-import pkg from 'phaser/package.json';
 import colors from '../util/colors';
-
+const FIRST_LEVEL = '1';
 class Boot extends Phaser.Scene {
   constructor () {
     super({
@@ -30,7 +29,7 @@ class Boot extends Phaser.Scene {
   create (config) {
     console.log('Booting!')
     this.scene.start('audio');
-    this.scene.start('1').remove();
+    this.scene.start(FIRST_LEVEL).remove();
   }
 
   createProgressBar () {

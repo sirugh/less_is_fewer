@@ -1,5 +1,6 @@
 export default class Player {
   constructor (scene, x, y, texture) {
+    this.scene = scene;
     this.sprite = scene.physics.add.sprite(
       x,
       y,
@@ -43,6 +44,10 @@ export default class Player {
     }
 
     if (cursors.up.isDown && (this.sprite.body.blocked[gravityDirection] || this.sprite.body.touching[gravityDirection])) { // apply force relative to the player
+      this.scene.scene.get('audio').trigger({
+        key: 'jump'
+      });
+
       playerAxis = 'y';
       // inverse if right or left
       if (gravityDirection === 'left' || gravityDirection === 'right') {

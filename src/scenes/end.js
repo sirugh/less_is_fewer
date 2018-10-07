@@ -1,19 +1,19 @@
 import LevelGenerator from './generator';
 
 const config = {
-  key: 'end',
-  active: false,
-  nextLevel: 'level-1',
+  key: 'end',  
   player: { x: 100, y: 450 },
-  exit: { x: 700, y: 500 },
+  exit: { x: 400, y: 50 },
   platforms: [
     { x: 100, y: 550, texture: 'white_platform' },
-    { x: 700, y: 550, texture: 'black_platform' }
+    { x: 400, y: 300, texture: 'black_platform' }
   ],
   colorSwitches: [
     { x: 400, y: 350 }
   ],
-  gravitySwitches: [],
+  gravitySwitches: [
+    { x: 400, y: 350, direction: 'up' }
+  ],
   text: 'END'
 }
 

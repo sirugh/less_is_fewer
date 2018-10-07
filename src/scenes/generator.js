@@ -31,6 +31,9 @@ export default function LevelGenerator (config) {
       const { player, cursors } = this.objects;
 
       if (player.isTouchingWorld()) {
+        this.scene.get('audio').trigger({
+          key: 'death'
+        });
         this.scene.restart();
       }
   
@@ -98,6 +101,9 @@ export default function LevelGenerator (config) {
     }
   
     _toggleNextLevel () {
+      this.scene.get('audio').trigger({
+        key: 'win'
+      });
       const nextLevel = (parseInt(config.key) + 1).toString();
       if (this.scene.get(nextLevel)) {
         console.debug(`Switching to level ${nextLevel}`);
@@ -113,6 +119,9 @@ export default function LevelGenerator (config) {
     }
   
     _toggleColor (playerSprite, target) {
+      this.scene.get('audio').trigger({
+        key: 'switchColor'
+      });
       const { player, camera, platforms } = this.objects;
   
       // Switch the color of the player and the background.
@@ -129,6 +138,9 @@ export default function LevelGenerator (config) {
     }
     
     _changeGravity (desiredDirection) {
+      this.scene.get('audio').trigger({
+        key: 'switchGravity'
+      });
       const { player } = this.objects;
 
       const gravityDirection = utils.getGravityDirection(this.physics.world.gravity);

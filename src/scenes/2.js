@@ -3,7 +3,7 @@ import LevelGenerator from './generator';
 const config = {
   key: '2',
   player: { x: 150, y: 450 },
-  exit: { x: 50, y: 100 },
+  exit: { x: 150, y: 100 },
   platforms: [
     { x: 200, y: 150, texture: 'white_platform' },
     { x: 200, y: 350, texture: 'white_platform' },
