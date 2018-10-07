@@ -14,7 +14,7 @@ const config = {
   gravitySwitches: [
     { x: 400, y: 350, direction: 'up' }
   ],
-  text: 'END'
+  text: 'Congrats! The end.'
 }
 
 export default LevelGenerator(config);

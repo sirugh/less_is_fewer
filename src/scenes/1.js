@@ -12,7 +12,8 @@ const config = {
   colorSwitches: [
     { x: 400, y: 350 }
   ],
-  gravitySwitches: [],
+  gravitySwitches: [
+  ],
 }
 
 export default LevelGenerator(config);

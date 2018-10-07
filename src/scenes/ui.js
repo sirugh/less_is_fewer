@@ -46,6 +46,7 @@ class UI extends Phaser.Scene {
           this.deaths = 0;
           this.elapsedTime = 0;
           this.running = true;
+          this.finalTime.setText('');
         })
       }
     });
