@@ -6,7 +6,6 @@ export default class Player {
       texture
     )
     this.sprite.setScale(0.5);
-    this.sprite.setBounce(0.2);
     this.sprite.setCollideWorldBounds(true);
   }
 

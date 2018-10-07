@@ -1,16 +1,7 @@
 import 'phaser';
-import pkg from 'phaser/package.json';
 import Player from '../characters/player';
 import Switch from '../characters/switch';
 import * as utils from '../util/utilities';
-
-const WHITE_RGBA = 'rgba(255,255,255,1)';
-const BLACK_RGBA = 'rgba(0,0,0,1)';
-
-var platforms;
-var cursors;
-var stars;
-var objects = {};
 
 class End extends Phaser.Scene {
   constructor () {
@@ -18,117 +9,87 @@ class End extends Phaser.Scene {
       key: 'end',
       active: false
     })
+
+    this.objects = {}
   }
 
-  create (config) {
-    const thisScene = this;
-    const centerX = 800 / 2;
-    const centerY = 600 / 2;
+  create () {
+    this.createObjects();
+    this.addCollisions();
+    this.addInputs();
+  }
 
-    objects.camera = this.cameras.add(0, 0, 800, 600);
+  update () {
+    const { player, cursors } = this.objects;
+    
+    if (player.isTouchingWorld()) {
+      this.scene.restart();
+    }
 
-    // Create platform groups. We will use these to toggle collision boundaries.
-    platforms = this.physics.add.staticGroup();
-    platforms.create(0, 550, 'white_platform')
-    platforms.create(800, 550, 'black_platform')
+    player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
+  }
 
-    // Create player
-    this.player = new Player(this, 100, 450, 'dude')
-    const playerSprite = this.player.sprite;
+  createObjects() {
+    this.objects.camera = this.cameras.add(0, 0, 800, 600);
+    this.objects.cursors = this.input.keyboard.createCursorKeys();
+    this.objects.platforms = this.physics.add.staticGroup();
 
-
-    // Create "color switcher"
-    objects.colorSwitches = [
+    // Set up level.
+    this.objects.platforms.create(0, 550, 'white_platform')
+    this.objects.platforms.create(800, 550, 'black_platform')
+    this.objects.player = new Player(this, 100, 450, 'dude')
+    this.objects.exit = (new Switch(this, 700, 500, 'exit')).instance
+    this.objects.colorSwitches = [
       (new Switch(this, 400, 350, 'star')).instance,
     ]
 
-    // Add collisions
-    this.physics.add.collider(playerSprite, platforms);
+    this.add
+      .text(400, 300 * 0.8, 'THE END', { font: "bold 30px Arial", fill: "#fff" })
+      .setOrigin(0.5, 0.5);
+  }
 
-    objects.colorSwitches.forEach(item => {
-      this.physics.add.overlap(playerSprite, item, this._toggleColor, null, this);
+  addCollisions () {
+    const { player, exit, platforms, camera } = this.objects;
+
+    this.physics.add.collider(player.sprite, platforms);
+
+    this.objects.colorSwitches.forEach(item => {
+      this.physics.add.overlap(player.sprite, item, this._toggleColor, null, this);
     });
 
-    // Create exit
-    const exit = (new Switch(this, centerX, centerY * 0.5, 'exit')).instance
-    this.physics.add.overlap(playerSprite, exit, this._toggleNextLevel, null, this);
+    this.physics.add.overlap(player.sprite, exit, this._toggleNextLevel, null, this);
+    
+    // Disable collision on platforms the same color as the background
+    platforms.children.entries.forEach((platform) => {
+      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
+    });  
+  }
 
-    // Add inputs
-    cursors = this.input.keyboard.createCursorKeys();
-
+  addInputs () {
     this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
     this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
-
-    objects.camera.setBackgroundColor(BLACK_RGBA);
-
-    this._updatePlatformCollisions();
-
-    const welcomeMessage = `THE END`;
-
-    this.add
-      .text(centerX, centerY * 0.8, welcomeMessage, { font: "bold 30px Arial", fill: "#fff" })
-      .setOrigin(0.5, 0.5);
   }
 
   _toggleNextLevel () {
     this.scene.start('level-1');
   }
 
-  _toggleColor (player, target) {
-    this._changeBackground();
-    this._updatePlatformCollisions();
+  _toggleColor (playerSprite, target) {
+    const { player, camera, platforms } = this.objects;
 
-    this.player.toggleColor();
-    target && target.disableBody(true, true);
-  }
+    // Switch the color of the player and the background.
+    player.toggleColor();
+    utils.changeBackgroundColor(camera);
 
-  update () {
-    if (this.player.isTouchingWorld()) {
-      this.scene.restart();
-    }
-
-    this.player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
-  }
-
-  _updatePlatformCollisions() {
-    platforms.children.entries.forEach(platform => {
-      // If platform color === background color,
-      // disable platform
-      // else enable platform
-      const platformIsWhite = platform.texture.key === 'white_platform';
-      const platformIsBlack = platform.texture.key === 'black_platform';
-
-      if (this._backgroundIsWhite() && platformIsWhite) {
-        platform.disableBody(true, true)
-      }
-      else if (this._backgroundIsBlack() && platformIsBlack) {
-        platform.disableBody(true, true)
-      }
-      else {
-        platform.enableBody(false, platform.x, platform.y, true, true);
-      }
+    // Disable collision on platforms the same color as the background.
+    platforms.children.entries.forEach((platform) => {
+      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
     });
-  }
 
-  _backgroundIsWhite() {
-    return objects.camera.backgroundColor.rgba === WHITE_RGBA;
-  }
-
-  _backgroundIsBlack() {
-    return objects.camera.backgroundColor.rgba === BLACK_RGBA;
-  }
-
-  _changeBackground () {
-    // Get current rgba
-    const currColor = objects.camera.backgroundColor.rgba
-
-    if (this._backgroundIsWhite()) {
-      objects.camera.setBackgroundColor(BLACK_RGBA);
-    }
-    else {
-      objects.camera.setBackgroundColor(WHITE_RGBA);
-    }
-
+    // Disable the target that triggered this event.
+    target && target.disableBody(true, true);
+    
+    // TODO: toggle text color
   }
 }
 

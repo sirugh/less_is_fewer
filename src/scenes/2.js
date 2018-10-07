@@ -1,112 +1,99 @@
 import 'phaser';
-import pkg from 'phaser/package.json';
 import Player from '../characters/player';
 import Switch from '../characters/switch';
 import * as utils from '../util/utilities';
 
-const WHITE_RGBA = 'rgba(255,255,255,1)';
-const BLACK_RGBA = 'rgba(0,0,0,1)';
-
-var platforms;
-var cursors;
-var stars;
-var objects = {};
-
-class Gravity extends Phaser.Scene {
+class Level2 extends Phaser.Scene {
   constructor () {
     super({
       key: 'level-2',
       active: false
     })
-    window._scene = this;
+    this.objects = {};
   }
 
   create (config) {
-    const thisScene = this;
+    this.createObjects();
+    this.addCollisions();
+    this.addInputs();
+  }
 
-    objects.camera = this.cameras.add(0, 0, 800, 600);
+  update () {
+    const { player, cursors } = this.objects;
+    
+    if (player.isTouchingWorld()) {
+      this.scene.restart();
+    }
 
-    // Create platform groups. We will use these to toggle collision boundaries.
-    platforms = this.physics.add.staticGroup();
-    platforms.create(0, 400, 'white_platform').setScale(.5).refreshBody();
-    platforms.create(0, 200, 'white_platform').setScale(.5).refreshBody();
+    player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
+  }
 
-    // Create player
-    this.player = new Player(this, 100, 450, 'dude')
-    const playerSprite = this.player.sprite;
+  createObjects () {
+    this.objects.camera = this.cameras.add(0, 0, 800, 600);
+    this.objects.cursors = this.input.keyboard.createCursorKeys();
+    this.objects.platforms = this.physics.add.staticGroup();
 
-    // Create "gravity switcher"
-    const gravitySwitch1 = (new Switch(this, 750, 500, 'bomb')).instance
+    this.objects.platforms.create(100, 550, 'white_platform')
+    this.objects.platforms.create(700, 450, 'black_platform')
+    this.objects.platforms.create(100, 350, 'white_platform')
+    this.objects.platforms.create(700, 250, 'black_platform')
+    this.objects.platforms.create(100, 150, 'white_platform')
+    this.objects.player = new Player(this, 100, 450, 'dude')
+    this.objects.colorSwitches = [
+      (new Switch(this, 515, 400, 'star')).instance,
+      (new Switch(this, 285, 300, 'star')).instance,
+      (new Switch(this, 515, 200, 'star')).instance,
+      (new Switch(this, 285, 100, 'star')).instance
+    ]
 
-    // Add collisions
-    this.physics.add.collider(playerSprite, platforms);
+    this.objects.exit = (new Switch(this, 50, 100, 'exit')).instance
+  }
 
-    this.physics.add.overlap(playerSprite, gravitySwitch1, (player, target) => {
-      thisScene._changeGravity();
-      target.disableBody(true, true);
-    }, null, this);
+  addCollisions () {
+    const { player, exit, platforms, camera, colorSwitches } = this.objects;
 
-    // Add inputs
-    cursors = this.input.keyboard.createCursorKeys();
+    this.physics.add.collider(player.sprite, platforms);
 
+    colorSwitches.forEach(item => {
+      this.physics.add.overlap(player.sprite, item, this._toggleColor, null, this);
+    });
+
+    this.physics.add.overlap(player.sprite, exit, this._toggleNextLevel, null, this);
+
+    // Disable collision on platforms the same color as the background
+    platforms.children.entries.forEach((platform) => {
+      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
+    });   
+  }
+
+  addInputs () {
+    this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
     this.input.keyboard.on('keydown_W', () => this._changeGravity.call(this, 'up'));
     this.input.keyboard.on('keydown_A', () => this._changeGravity.call(this, 'left'));
     this.input.keyboard.on('keydown_S', () => this._changeGravity.call(this, 'down'));
     this.input.keyboard.on('keydown_D', () => this._changeGravity.call(this, 'right'));
-
     this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
-
-    // Create exit
-    const exit = (new Switch(this, 10, 10, 'exit')).instance
-    this.physics.add.overlap(playerSprite, exit, this._toggleNextLevel, null, this);
-
-    objects.camera.setBackgroundColor(BLACK_RGBA);
   }
 
   _toggleNextLevel () {
     this.scene.start('level-3');
   }
 
+  _toggleColor (playerSprite, target) {
+    const { player, camera, platforms } = this.objects;
 
-  update () {
-    this.player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
-  }
+    // Switch the color of the player and the background.
+    player.toggleColor();
+    utils.changeBackgroundColor(camera);
 
-  _changeGravity (desiredDirection) {
-    const gravityDirection = utils.getGravityDirection(this.physics.world.gravity);
+    // Disable collision on platforms the same color as the background.
+    platforms.children.entries.forEach((platform) => {
+      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
+    });
 
-    if (!desiredDirection) {
-      // TODO: make this not dumb
-      if (gravityDirection === 'left' || gravityDirection === 'right') {
-        desiredDirection = 'down'
-      }
-      if (gravityDirection === 'up' || gravityDirection === 'down') {
-        desiredDirection = 'left'
-      }
-    }
-
-    // reset
-    this.physics.world.gravity.y = 0;
-    this.physics.world.gravity.x = 0;
-
-    // set force from appropraite direction
-    if (desiredDirection === 'left') {
-      this.physics.world.gravity.x = -330;
-      this.player.sprite.angle = 90;
-    }
-    if (desiredDirection === 'up') {
-      this.physics.world.gravity.y = -330;
-      this.player.sprite.angle = 180;
-    }
-    if (desiredDirection === 'right') {
-      this.physics.world.gravity.x = 330;
-      this.player.sprite.angle = -90;
-    }
-    if (desiredDirection === 'down') {
-      this.physics.world.gravity.y = 330;
-      this.player.sprite.angle = 0;
-    }
+    // Disable the target that triggered this event.
+    target && target.disableBody(true, true);
   }
 }
 
-export default Gravity;
+export default Level2;
