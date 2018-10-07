@@ -81,12 +81,7 @@ class Level3 extends Phaser.Scene {
   }
 
   update () {
-<<<<<<< HEAD
-    if((player.body.blocked.down && !player.body.touching.down)
-    ){
-=======
     if (this.player.isTouchingWorld()) {
->>>>>>> 875adbc133635a4f5a3c9fb0a8bf7db53efa3f5c
       this.scene.restart();
     }
 
