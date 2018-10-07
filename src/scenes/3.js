@@ -27,15 +27,21 @@ class Level3 extends Phaser.Scene {
 
     // Create platform groups. We will use these to toggle collision boundaries.
     platforms = this.physics.add.staticGroup();
-    platforms.create(0, 550, 'white_platform')
-    platforms.create(800, 550, 'black_platform')
+    platforms.create(100, 550, 'white_platform')
+    platforms.create(700, 450, 'black_platform')
+    platforms.create(100, 350, 'white_platform')
+    platforms.create(700, 250, 'black_platform')
+    platforms.create(100, 150, 'white_platform')
 
     // Create player
     player = (new Player(this, 100, 450, 'dude')).instance
 
     // Create "color switcher"
     objects.colorSwitches = [
-      (new Switch(this, 400, 350, 'star')).instance,
+      (new Switch(this, 515, 400, 'star')).instance,
+      (new Switch(this, 285, 300, 'star')).instance,
+      (new Switch(this, 515, 200, 'star')).instance,
+      (new Switch(this, 285, 100, 'star')).instance
     ]
 
     // Add collisions
@@ -46,7 +52,7 @@ class Level3 extends Phaser.Scene {
     });
 
     // Create exit
-    const exit = (new Switch(this, 700, 500, 'exit')).instance
+    const exit = (new Switch(this, 50, 100, 'exit')).instance
     this.physics.add.overlap(player, exit, this._toggleNextLevel, null, this);
 
     // Add inputs
@@ -84,10 +90,7 @@ class Level3 extends Phaser.Scene {
   }
 
   update () {
-    if((player.body.blocked.left && !player.body.touching.left)
-      || (player.body.blocked.up && !player.body.touching.up)
-      || (player.body.blocked.right && !player.body.touching.right)
-      || (player.body.blocked.down && !player.body.touching.down)
+    if((player.body.blocked.down && !player.body.touching.down)
     ){
       this.scene.restart();
     }
