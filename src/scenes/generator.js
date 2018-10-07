@@ -26,7 +26,7 @@ export default function LevelGenerator (config) {
       this.addCollisions();
       this.addInputs();
     }
-  
+    
     update () {
       const { player, cursors } = this.objects;
 
@@ -34,12 +34,14 @@ export default function LevelGenerator (config) {
         this.scene.get('audio').trigger({
           key: 'death'
         });
+        this.events.emit('death');
         this.scene.restart();
       }
   
       player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
     }
   
+
     createObjects() {
       this.objects.camera = this.cameras.add(0, 0, 800, 600);
       this.objects.camera.setBackgroundColor(BLACK_RGBA);
@@ -111,6 +113,7 @@ export default function LevelGenerator (config) {
       }
       else if (this.scene.key ==='end') {
         console.debug(`Back to level 1!`);
+        this.events.emit('restart');
         this.scene.start('1');
       }
       else {
