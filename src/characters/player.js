@@ -9,9 +9,12 @@ export default class Player {
     this.sprite.setCollideWorldBounds(true);
   }
 
+  /**
+   * If tinted (black) remove tint (make white), otherwise apply tint!
+   */
   toggleColor () {
-    if (this.isTinted) {
-      this.sprite.clearTint()
+    if (this.sprite.isTinted) {
+      this.sprite.clearTint();
     }
     else {
       this.sprite.setTint(0x000000)

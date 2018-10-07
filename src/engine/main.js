@@ -1,5 +1,4 @@
 import 'phaser';
-import pkg from 'phaser/package.json';
 import scenes from '../scenes';
 import { GRAVITY } from '../util/constants';
 

@@ -17,6 +17,8 @@ class Boot extends Phaser.Scene {
     this.load.image('exit', 'assets/ruby.png');
     this.load.image('white_platform', 'assets/white_platform.png');
     this.load.image('black_platform', 'assets/black_platform.png');
+    this.load.image('white_platform_vertical', 'assets/white_platform_vertical.png');
+    this.load.image('black_platform_vertical', 'assets/black_platform_vertical.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
 
@@ -28,7 +30,7 @@ class Boot extends Phaser.Scene {
   create (config) {
     console.log('Booting!')
     this.scene.start('audio');
-    this.scene.start('level-1').remove();
+    this.scene.start('1').remove();
   }
 
   createProgressBar () {
@@ -39,8 +41,8 @@ class Boot extends Phaser.Scene {
   }
 
   onLoadComplete (loader, totalComplete, totalFailed) {
-    console.debug('complete', totalComplete);
-    console.debug('failed', totalFailed);
+    console.debug('Loaded assets', totalComplete);
+    console.debug('Assets failed', totalFailed);
   }
 
   onLoadProgress (progress) {
@@ -53,28 +55,6 @@ class Boot extends Phaser.Scene {
       .fillRect(rect.x, rect.y, rect.width, rect.height)
       .fillStyle(color)
       .fillRect(rect.x, rect.y, progress * rect.width, rect.height);
-  }
-
-  createAnims () {
-    this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: 'turn',
-      frames: [{ key: 'dude', frame: 4 }],
-      frameRate: 20
-    });
-
-    this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1
-    });
   }
 }
 

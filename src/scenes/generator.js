@@ -45,34 +45,40 @@ export default function LevelGenerator (config) {
   
       // Set up level.
       this.objects.player = new Player(this, config.player.x, config.player.y, 'dude')
-      this.objects.exit = (new Switch(this, config.exit.x, config.exit.y, 'exit')).instance
+      this.objects.exit = new Switch(this, config.exit.x, config.exit.y, 'exit')
+      
       config.platforms.forEach(platform => {
         this.objects.platforms.create(platform.x, platform.y, platform.texture)
-      })
+      });
 
       this.objects.colorSwitches = config.colorSwitches.map(colorSwitch => {
-        return (new Switch(this, colorSwitch.x, colorSwitch.y, 'star')).instance
-      })
+        return new Switch(this, colorSwitch.x, colorSwitch.y, 'star')
+      });
+      
       this.objects.gravitySwitches = config.gravitySwitches.map(gravitySwitch => {
-        return (new Switch(this, gravitySwitch.x, gravitySwitch.y, 'bomb')).instance
-      })
+        return new Switch(this, gravitySwitch.x, gravitySwitch.y, 'bomb', gravitySwitch.direction)
+      });
+
+      config.text && this.add
+        .text(400, 300 * 0.8, config.text, { font: "bold 30px Arial", fill: "#fff" })
+        .setOrigin(0.5, 0.5);
     }
   
     addCollisions () {
       const { player, exit, platforms, camera, colorSwitches, gravitySwitches } = this.objects;
   
       this.physics.add.collider(player.sprite, platforms);  
-      this.physics.add.overlap(player.sprite, exit, this._toggleNextLevel, null, this);
+      this.physics.add.overlap(player.sprite, exit.sprite, this._toggleNextLevel, null, this);
 
       gravitySwitches.forEach(item => {
-        this.physics.add.overlap(player.sprite, item, (player, target) => {
-          this._changeGravity();
+        this.physics.add.overlap(player.sprite, item.sprite, (player, target) => {
+          this._changeGravity(item.direction);
           target.disableBody(true, true);
         }, null, this);    
       });
 
       colorSwitches.forEach(item => {
-        this.physics.add.overlap(player.sprite, item, this._toggleColor, null, this);
+        this.physics.add.overlap(player.sprite, item.sprite, this._toggleColor, null, this);
       });
 
       // Disable collision on platforms the same color as the background.
@@ -92,7 +98,18 @@ export default function LevelGenerator (config) {
     }
   
     _toggleNextLevel () {
-      this.scene.start(config.nextLevel || 'end');
+      const nextLevel = (parseInt(config.key) + 1).toString();
+      if (this.scene.get(nextLevel)) {
+        console.debug(`Switching to level ${nextLevel}`);
+        this.scene.start(nextLevel);
+      }
+      else if (this.scene.key ==='end') {
+        console.debug(`Back to level 1!`);
+        this.scene.start('1');
+      }
+      else {
+        this.scene.start('end');  
+      }
     }
   
     _toggleColor (playerSprite, target) {
@@ -118,6 +135,20 @@ export default function LevelGenerator (config) {
 
       if (!desiredDirection) {
         // TODO: make this not dumb
+        switch (gravityDirection) {
+          case 'left':
+            desiredDirection = 'up'
+            break;
+          case 'right':
+            desiredDirection = 'down'
+            break;
+          case 'up':
+            desiredDirection = 'right'
+            break;
+          case 'down':
+            desiredDirection = 'left'
+            break;
+        }
         if (gravityDirection === 'left' || gravityDirection === 'right') {
           desiredDirection = 'down'
         }
@@ -147,6 +178,8 @@ export default function LevelGenerator (config) {
         this.physics.world.gravity.y = 330;
         player.sprite.angle = 0;
       }
+
+      console.log('Switching gravity', desiredDirection)
     }
   }  
 }

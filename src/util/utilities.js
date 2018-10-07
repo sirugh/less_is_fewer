@@ -33,16 +33,14 @@ const changeBackgroundColor = (camera) =>{
 }
 
 /**
+ * Disable platforms that are the same color as the background color.
  * 
  * @param {*} platform
  * @param {*} backgroundColor background color being switched to
  */
 const updatePlatformCollisions = (platform, backgroundColor) =>{
-  // If platform color === background color,
-  // disable platform
-  // else enable platform
-  const platformIsWhite = platform.texture.key === 'white_platform';
-  const platformIsBlack = platform.texture.key === 'black_platform';
+  const platformIsWhite = (platform.texture.key === 'white_platform' || platform.texture.key === 'white_platform_vertical');
+  const platformIsBlack = (platform.texture.key === 'black_platform' || platform.texture.key === 'black_platform_vertical');
 
   if (isWhite(backgroundColor) && platformIsWhite) {
     platform.disableBody(true, true)

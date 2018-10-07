@@ -1,19 +1,21 @@
 import LevelGenerator from './generator';
 
 const config = {
-  key: '1',
+  key: '5',
   player: { x: 100, y: 450 },
-  exit: { x: 700, y: 500 },
+  exit: { x: 100, y: 200 },
   platforms: [
-    // Platforms are 200x32. x is middle alignment.
+    { x: 32, y: 200, texture: 'black_platform_vertical' },
     { x: 100, y: 550, texture: 'white_platform' },
     { x: 700, y: 550, texture: 'black_platform' }
   ],
   colorSwitches: [
     { x: 400, y: 350 }
   ],
-  gravitySwitches: [],
-  text: 'JUMP'
+  gravitySwitches: [
+    { x: 750, y: 500 }
+  ],
+  text: 'BOTH'
 }
 
 export default LevelGenerator(config);
