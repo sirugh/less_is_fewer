@@ -63,16 +63,8 @@ function isBlack(rgba) {
   return rgba === BLACK_RGBA;
 }
 
-/**
- * Return the opposite color, white -> black -> white -> etc
- */
-const getOppositeColor = (rgba) => {
-
-}
-
 export {
   changeBackgroundColor,
   getGravityDirection,
-  getOppositeColor,
   updatePlatformCollisions
 }

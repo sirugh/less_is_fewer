@@ -12,17 +12,15 @@ class AudioManager extends Phaser.Scene {
 
   preload () {
     this.load.audio('bgm', 'assets/audio/bgm1.wav');
-    this.load.audio('wtol', 'assets/audio/wto_left.ogg');
-    this.load.audio('wtor', 'assets/audio/wto_right.ogg');
   }
 
   create (config) {
     console.debug('Creating audio')
     this.sounds.bgm = this.sound.add('bgm', { volume: 0.5 })
-    this.trigger({
-      key: 'bgm',
-      loop: true
-    });
+    // this.trigger({
+    //   key: 'bgm',
+    //   loop: true
+    // });
   }
 
   trigger({ key, marker, loop }) {

@@ -2,6 +2,7 @@ import 'phaser';
 import Player from '../characters/player';
 import Switch from '../characters/switch';
 import * as utils from '../util/utilities';
+import { BLACK_RGBA } from '../util/constants';
 
 export default function LevelGenerator (config) {
   const {
@@ -38,6 +39,7 @@ export default function LevelGenerator (config) {
   
     createObjects() {
       this.objects.camera = this.cameras.add(0, 0, 800, 600);
+      this.objects.camera.setBackgroundColor(BLACK_RGBA);
       this.objects.cursors = this.input.keyboard.createCursorKeys();
       this.objects.platforms = this.physics.add.staticGroup();
   
@@ -71,6 +73,11 @@ export default function LevelGenerator (config) {
 
       colorSwitches.forEach(item => {
         this.physics.add.overlap(player.sprite, item, this._toggleColor, null, this);
+      });
+
+      // Disable collision on platforms the same color as the background.
+      platforms.children.entries.forEach((platform) => {
+        utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
       });
     }
   
