@@ -26,6 +26,8 @@ class Boot extends Phaser.Scene {
   }
 
   create (config) {
+    console.log('Booting!')
+    this.scene.start('audio');
     this.scene.start('level-1').remove();
   }
 

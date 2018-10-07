@@ -20,6 +20,7 @@ export default function LevelGenerator (config) {
     }
   
     create () {
+      console.debug(`Creating level ${key}`)
       this.createObjects();
       this.addCollisions();
       this.addInputs();
@@ -27,7 +28,7 @@ export default function LevelGenerator (config) {
   
     update () {
       const { player, cursors } = this.objects;
-      
+
       if (player.isTouchingWorld()) {
         this.scene.restart();
       }
