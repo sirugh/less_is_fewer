@@ -2,11 +2,11 @@ import 'phaser';
 import pkg from 'phaser/package.json';
 import Player from '../characters/player';
 import Switch from '../characters/switch';
+import * as utils from '../util/utilities';
 
 const WHITE_RGBA = 'rgba(255,255,255,1)';
 const BLACK_RGBA = 'rgba(0,0,0,1)';
 
-var player;
 var platforms;
 var cursors;
 var stars;
@@ -31,7 +31,8 @@ class Level1 extends Phaser.Scene {
     platforms.create(800, 550, 'black_platform')
 
     // Create player
-    player = (new Player(this, 100, 450, 'dude')).instance
+    this.player = new Player(this, 100, 450, 'dude')
+    const playerSprite = this.player.sprite;
 
     // Create "color switcher"
     objects.colorSwitches = [
@@ -39,15 +40,15 @@ class Level1 extends Phaser.Scene {
     ]
 
     // Add collisions
-    this.physics.add.collider(player, platforms);
+    this.physics.add.collider(playerSprite, platforms);
 
     objects.colorSwitches.forEach(item => {
-      this.physics.add.overlap(player, item, this._toggleColor, null, this);
+      this.physics.add.overlap(playerSprite, item, this._toggleColor, null, this);
     });
 
     // Create exit
     const exit = (new Switch(this, 700, 500, 'exit')).instance
-    this.physics.add.overlap(player, exit, this._toggleNextLevel, null, this);
+    this.physics.add.overlap(playerSprite, exit, this._toggleNextLevel, null, this);
 
     // Add inputs
     cursors = this.input.keyboard.createCursorKeys();
@@ -67,44 +68,17 @@ class Level1 extends Phaser.Scene {
   _toggleColor (player, target) {
     this._changeBackground();
     this._updatePlatformCollisions();
-    this._togglePlayerColor(player);
 
+    this.player.toggleColor();
     target && target.disableBody(true, true);
   }
 
-  _togglePlayerColor (player) {
-    if (player) {
-      if (player.isTinted) {
-        player.clearTint()
-      }
-      else {
-        player.setTint(0x000000)
-      }
-    }
-  }
-
   update () {
-    if((player.body.blocked.left && !player.body.touching.left)
-      || (player.body.blocked.up && !player.body.touching.up)
-      || (player.body.blocked.right && !player.body.touching.right)
-      || (player.body.blocked.down && !player.body.touching.down)
-    ){
+    if (this.player.isTouchingWorld()) {
       this.scene.restart();
     }
 
-    if (cursors.left.isDown) {
-      player.setVelocityX(-160);
-    }
-    else if (cursors.right.isDown) {
-      player.setVelocityX(160);
-    }
-    else {
-      player.setVelocityX(0);
-    }
-
-    if (cursors.up.isDown && player.body.touching.down){
-      player.setVelocityY(-330);
-    }
+    this.player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
   }
 
   _updatePlatformCollisions() {
