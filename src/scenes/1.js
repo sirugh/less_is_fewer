@@ -1,90 +1,19 @@
-import 'phaser';
-import Player from '../characters/player';
-import Switch from '../characters/switch';
-import * as utils from '../util/utilities';
+import LevelGenerator from './generator';
 
-class Level1 extends Phaser.Scene {
-  constructor () {
-    super({
-      key: 'level-1',
-      active: false
-    })
-
-    this.objects = {}
-  }
-
-  create () {
-    this.createObjects();
-    this.addCollisions();
-    this.addInputs();
-  }
-
-  update () {
-    const { player, cursors } = this.objects;
-    
-    if (player.isTouchingWorld()) {
-      this.scene.restart();
-    }
-
-    player.handleMovement(cursors, utils.getGravityDirection(this.physics.world.gravity));
-  }
-
-  createObjects() {
-    this.objects.camera = this.cameras.add(0, 0, 800, 600);
-    this.objects.cursors = this.input.keyboard.createCursorKeys();
-    this.objects.platforms = this.physics.add.staticGroup();
-
-    // Set up level.
-    this.objects.platforms.create(0, 550, 'white_platform')
-    this.objects.platforms.create(800, 550, 'black_platform')
-    this.objects.player = new Player(this, 100, 450, 'dude')
-    this.objects.exit = (new Switch(this, 700, 500, 'exit')).instance
-    this.objects.colorSwitches = [
-      (new Switch(this, 400, 350, 'star')).instance,
-    ]
-  }
-
-  addCollisions () {
-    const { player, exit, platforms, camera } = this.objects;
-
-    this.physics.add.collider(player.sprite, platforms);
-
-    this.objects.colorSwitches.forEach(item => {
-      this.physics.add.overlap(player.sprite, item, this._toggleColor, null, this);
-    });
-
-    this.physics.add.overlap(player.sprite, exit, this._toggleNextLevel, null, this);
-    
-    // Disable collision on platforms the same color as the background
-    platforms.children.entries.forEach((platform) => {
-      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
-    });  
-  }
-
-  addInputs () {
-    this.input.keyboard.on('keydown_R', this._toggleColor.bind(this));
-    this.input.keyboard.on('keydown_N', this._toggleNextLevel.bind(this));
-  }
-
-  _toggleNextLevel () {
-    this.scene.start('level-2');
-  }
-
-  _toggleColor (playerSprite, target) {
-    const { player, camera, platforms } = this.objects;
-
-    // Switch the color of the player and the background.
-    player.toggleColor();
-    utils.changeBackgroundColor(camera);
-
-    // Disable collision on platforms the same color as the background.
-    platforms.children.entries.forEach((platform) => {
-      utils.updatePlatformCollisions(platform, camera.backgroundColor.rgba)
-    });
-
-    // Disable the target that triggered this event.
-    target && target.disableBody(true, true);
-  }
+const config = {
+  key: 'level-1',
+  active: false,
+  nextLevel: 'level-2',
+  player: { x: 100, y: 450 },
+  exit: { x: 700, y: 500 },
+  platforms: [
+    { x: 0, y: 550, texture: 'white_platform' },
+    { x: 800, y: 550, texture: 'black_platform' }
+  ],
+  colorSwitches: [
+    { x: 400, y: 350 }
+  ],
+  gravitySwitches: []
 }
 
-export default Level1;
+export default LevelGenerator(config);
