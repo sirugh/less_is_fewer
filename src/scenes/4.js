@@ -19,7 +19,6 @@ const config = {
   ],
   gravitySwitches: [
   ],
-  text: 'AGAIN'
 }
 
 export default LevelGenerator(config);

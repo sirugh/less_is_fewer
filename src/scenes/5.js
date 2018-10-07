@@ -15,7 +15,6 @@ const config = {
   gravitySwitches: [
     { x: 750, y: 500 }
   ],
-  text: 'BOTH'
 }
 
 export default LevelGenerator(config);

@@ -13,7 +13,6 @@ const config = {
     { x: 400, y: 350 }
   ],
   gravitySwitches: [],
-  text: 'JUMP'
 }
 
 export default LevelGenerator(config);
