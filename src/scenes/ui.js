@@ -35,7 +35,7 @@ class UI extends Phaser.Scene {
 
         scene.events.on('finish', () => {
           this.running = false;
-          const totalTime = this.elapsedTime / 10;
+          const totalTime = this.elapsedTime;
           // display final timer
           this.finalTime.setText(`Time: ${this.msToTime(totalTime)}`)
         });
