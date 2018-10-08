@@ -66,10 +66,11 @@ class UI extends Phaser.Scene {
   }
   
   msToTime (duration) {
-    let milliseconds = parseInt((duration%1000)/100)
-    let seconds = parseInt((duration/1000)%60)
-    let minutes = parseInt((duration/(1000*60))%60)
+    let milliseconds = parseInt((duration % 1000) / 10)
+    let seconds = parseInt((duration / 1000) % 60)
+    let minutes = parseInt((duration / (1000 * 60)) % 60)
 
+    milliseconds = (milliseconds < 10) ? `0${milliseconds}` : milliseconds;
     minutes = (minutes < 10) ? `0${minutes}` : minutes;
     seconds = (seconds < 10) ? `0${seconds}` : seconds;
 
