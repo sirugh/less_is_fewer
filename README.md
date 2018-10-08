@@ -1,9 +1,12 @@
-# Less Is Fewer
+# Jump
 
-Or is it?
+Game Jam 2018 complete!
 
-`npm run start`
+To play this game:
 
-* Switch levels with `N`.
-* On gravity level, toggle gravity with `G`.
-* On color level, toggle color with `R`.
+1) Check out the repo.
+2) `npm install`
+3) `npm start`
+4) http://localhost:8080
+
+Enjoy!
