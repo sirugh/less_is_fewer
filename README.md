@@ -1,10 +1,10 @@
 # Jump
 
-<figure class="game_container">
-  <iframe width="800" height="600" src="https://storage.googleapis.com/gamejam2018-218817.appspot.com/index.html" frameborder="0"></iframe>
-</figure>
-
 To play this game:
+
+Go [here](https://storage.googleapis.com/gamejam2018-218817.appspot.com/index.html).
+
+Or do the thing:
 
 1. Check out the repo.
 2. `npm install`
