@@ -1,13 +1,13 @@
 # Jump
 
-Game Jam 2018 complete!
+<iframe width="800" height="600" src="https://storage.googleapis.com/gamejam2018-218817.appspot.com/index.html" frameborder="0"></iframe>
 
 To play this game:
 
-1) Check out the repo.
-2) `npm install`
-3) `npm start`
-4) http://localhost:8080
+1. Check out the repo.
+2. `npm install`
+3. `npm start`
+4. http://localhost:8080
 
 Enjoy!
 
