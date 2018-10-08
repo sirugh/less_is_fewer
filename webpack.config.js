@@ -1,9 +1,12 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = {
   output: {
-    filename: '[hash].js',
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
   },
   resolve: {
     modules: ['src', 'node_modules'],
@@ -36,9 +39,11 @@ const config = {
       WEBGL_RENDERER: true,
     }),
     new HtmlWebpackPlugin({
-      // favicon: 'src/assets/img/favicon.png',
       template: 'src/index.html',
     }),
+    new CopyWebpackPlugin([
+      { from: 'assets', to: 'assets' }
+    ])
   ],
   devServer: {
     port: 8080,

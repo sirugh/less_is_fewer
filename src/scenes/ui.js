@@ -20,12 +20,12 @@ class UI extends Phaser.Scene {
       this.elapsedTime = this.elapsedTime + 10
     }, 10)
 
-    this.deathText = this.add.text(690, 10, 'Deaths: 100', { font: '20px Arial', fill: '#ffffff'})
+    this.deathText = this.add.text(690, 10, 'Deaths: 0', { font: '20px Arial', fill: '#ffffff'})
     this.timer = this.add.text(10, 10, '00:00:00', { font: '20px Arial', fill: '#ffffff'})
     this.finalTime = this.add
       .text(400, 200 * 0.8, '', { font: "bold 30px Arial", fill: "#fff" })
       .setOrigin(0.5, 0.5);
-    
+
     this.scene.manager.scenes.forEach(scene => {
       if (scene.constructor.name === 'Level') {
         scene.events.on('death', () => {
@@ -64,7 +64,7 @@ class UI extends Phaser.Scene {
       this.timer.setText()
     }
   }
-  
+
   msToTime (duration) {
     let milliseconds = parseInt((duration % 1000) / 10)
     let seconds = parseInt((duration / 1000) % 60)
