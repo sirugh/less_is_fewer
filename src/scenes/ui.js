@@ -20,7 +20,7 @@ class UI extends Phaser.Scene {
       this.elapsedTime = this.elapsedTime + 10
     }, 10)
 
-    this.deathText = this.add.text(700, 10, 'Deaths: 0', { font: '20px Arial', fill: '#ffffff'})
+    this.deathText = this.add.text(690, 10, 'Deaths: 100', { font: '20px Arial', fill: '#ffffff'})
     this.timer = this.add.text(10, 10, '00:00:00', { font: '20px Arial', fill: '#ffffff'})
     this.finalTime = this.add
       .text(400, 200 * 0.8, '', { font: "bold 30px Arial", fill: "#fff" })
@@ -37,7 +37,7 @@ class UI extends Phaser.Scene {
           this.running = false;
           const totalTime = this.elapsedTime / 10;
           // display final timer
-          this.finalTime.setText(`Total: ${totalTime}ms`)
+          this.finalTime.setText(`Time: ${this.msToTime(totalTime)}`)
         });
 
         scene.events.on('restart', () => {
@@ -55,13 +55,25 @@ class UI extends Phaser.Scene {
   }
 
   update () {
-    const ms = this.elapsedTime / 10;
     if (this.running) {
-      this.timer.setText(`Time: ${ms}ms`)
+      const ms = this.elapsedTime;
+
+      this.timer.setText(this.msToTime(ms))
     }
     else{
       this.timer.setText()
     }
+  }
+  
+  msToTime (duration) {
+    let milliseconds = parseInt((duration%1000)/100)
+    let seconds = parseInt((duration/1000)%60)
+    let minutes = parseInt((duration/(1000*60))%60)
+
+    minutes = (minutes < 10) ? `0${minutes}` : minutes;
+    seconds = (seconds < 10) ? `0${seconds}` : seconds;
+
+    return `${minutes}:${seconds}:${milliseconds}`
   }
 }
 
