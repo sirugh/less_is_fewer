@@ -40,7 +40,7 @@ export default class Player {
 
   // If the buffer contains true, we CAN!
   _canJump() {
-    return this._jumpBuffer.includes(true) && !this.isJumping;
+    return this._jumpBuffer.includes(true);
   }
 
   /**
