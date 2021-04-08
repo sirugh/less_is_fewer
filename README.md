@@ -1,8 +1,10 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/534ede03-a007-4e2a-98de-f86aac794f98/deploy-status)](https://app.netlify.com/sites/upbeat-hypatia-6f0354/deploys)
+
 # Jump
 
 To play this game:
 
-Go [here](https://storage.googleapis.com/gamejam2018-218817.appspot.com/index.html).
+Go [here](https://upbeat-hypatia-6f0354.netlify.app/).
 
 Or do the thing:
 
