@@ -4,7 +4,7 @@
 
 To play this game:
 
-Go [here](https://upbeat-hypatia-6f0354.netlify.app/).
+Go [here](https://lessisfewer.netlify.app/).
 
 Or do the thing:
 
@@ -20,6 +20,7 @@ Enjoy!
 Looking for help with level design! All it takes is a few props on a config with coordinates and boom!
 
 Here's an example level
+
 ```js
 import LevelGenerator from './generator';
 
@@ -54,4 +55,4 @@ export default LevelGenerator(config);
 - [ ] Moving platforms
 - [ ] Moving things that kill you besides touching the boundaries
 - [ ] All the things
-<3
+      <3
